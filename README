@@ -1,0 +1,18 @@
+RestormRoutingTricks
+=============
+
+This is adds a routing-condition to to evaluate a proc on a per request basis. That way you can do:
+
+map.connect 'clever_routes/:id',
+     :controller => 'venues',
+     :action => 'info',
+     :conditions => { :proc => Proc.new{|path,env| !Member.find_by_url_id(path.split('/').last).nil? } }
+
+or even
+
+map.connect 'clever_routes/:id',
+     :controller => 'venues',
+     :action => 'info',
+     :conditions => { :proc => Proc.new{|path,env| !Member.find_by_url_id(env[subdomain]).nil? } }
+
+This plugin is heavily inspired by Jamis Bucks Routing Tricks Plugin (http://svn.jamisbuck.org/rails-plugins/routing_tricks). It's not presented as a plugin because it's tricky or great code in any way or because you should immediately use the capability added to rails routing by this plugin in your app (most probably you shouldn't; if you think you have to, think again), but rather as a convenient method to publish this code and toy around with it.
